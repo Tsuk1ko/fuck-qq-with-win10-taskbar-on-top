@@ -49,6 +49,7 @@ public struct RECT {
             }
         } While ($ChangeCount -lt 2)
         # Set window style and position
+        Start-Sleep -Seconds 3
         [Window]::GetWindowRect($HWnd, [ref]$Rect)
         [Window]::MoveWindow($HWnd, $Rect.Left, $Rect.Top - 40, $Rect.Right - $Rect.Left, $Rect.Bottom - $Rect.Top, $true)
     }
