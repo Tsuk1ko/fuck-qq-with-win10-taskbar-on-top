@@ -46,7 +46,7 @@ public struct RECT {
             }
             Start-Sleep -Milliseconds 100
             $newHWnd = [Window]::FindWindow("TXGuiFoundation", "QQ")
-            if ($HWnd -ne $newHWnd) {
+            if (($HWnd -ne $newHWnd) -and ($newHWnd -ne 0)) {
                 $HWnd = $newHWnd
                 $ChangeCount++
             }
