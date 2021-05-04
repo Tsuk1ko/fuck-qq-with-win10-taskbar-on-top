@@ -1,5 +1,9 @@
 Param(
-    [int] $Delay
+    [int] $Delay = -1,
+    [int] $Left = -1,
+    [int] $Top = -1,
+    [int] $Width = -1,
+    [int] $Height = -1
 )
 Function Set-QQWindow {
     Begin {
@@ -34,7 +38,6 @@ public struct RECT {
     }
     Process {
         # Init
-        $Rect = New-Object RECT
         $HWnd = 0
         $ChangeCount = 0
         $WaitCount = 0
@@ -51,13 +54,19 @@ public struct RECT {
                 $ChangeCount++
             }
         } While ($ChangeCount -lt 2)
-        if ($Delay) {
+        if ($Delay -ne -1) {
             Start-Sleep -Milliseconds $Delay
             $HWnd = [Window]::FindWindow("TXGuiFoundation", "QQ")
         }
         # Set window style and position
-        [Window]::GetWindowRect($HWnd, [ref]$Rect)
-        [Window]::MoveWindow($HWnd, $Rect.Left, $Rect.Top - 40, $Rect.Right - $Rect.Left, $Rect.Bottom - $Rect.Top, $true)
+        if (($Left -ne -1) -and ($Top -ne -1) -and ($Width -ne -1) -and ($Height -ne -1)) {
+            [Window]::MoveWindow($HWnd, $Left, $Top, $Width, $Height, $true)
+        }
+        else {
+            $Rect = New-Object RECT
+            [Window]::GetWindowRect($HWnd, [ref]$Rect)
+            [Window]::MoveWindow($HWnd, $Rect.Left, $Rect.Top - 40, $Rect.Right - $Rect.Left, $Rect.Bottom - $Rect.Top, $true)
+        }
     }
 }
 
