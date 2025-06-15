@@ -3,8 +3,10 @@ Param(
     [int] $Left = -1,
     [int] $Top = -1,
     [int] $Width = -1,
-    [int] $Height = -1
+    [int] $Height = -1,
+    [switch] $StartUp = $false
 )
+
 Function Set-QQWindow {
     Begin {
         Try {
@@ -68,6 +70,11 @@ public struct RECT {
             [Window]::MoveWindow($HWnd, $Rect.Left, $Rect.Top - 40, $Rect.Right - $Rect.Left, $Rect.Bottom - $Rect.Top, $true)
         }
     }
+}
+
+# Stop on remote desktop
+if ($StartUp -and (quser | Select-String -Quiet '\brdp-')) {
+    Exit
 }
 
 $CurDir = (Resolve-Path '.').Path
